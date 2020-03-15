@@ -1,5 +1,12 @@
 <template>
-  <div>首页模块
+  <div><div class="split"></div>
+  <van-skeleton title avatar :row="3"></van-skeleton>
+<div class="split"></div>
+  <van-skeleton title avatar :row="3"></van-skeleton>
+<div class="split"></div>
+  <van-skeleton title avatar :row="3"></van-skeleton>
+<div class="split"></div>
+  <van-skeleton title avatar :row="3"></van-skeleton>
 
   </div>
 </template>

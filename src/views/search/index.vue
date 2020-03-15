@@ -1,5 +1,8 @@
 <template>
-  <div>搜索模块</div>
+<div class="container">
+  <!-- 导航  go(-1) 回到上一个历史记录 -->
+  <van-nav-bar title="搜索中心" left-arrow @click-left="$router.go(-1)"></van-nav-bar>
+</div>
 </template>
 
 <script>
