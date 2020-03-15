@@ -1,38 +1,68 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/home'
 
 Vue.use(VueRouter)
+// 按需加载路由 这样写比较清晰
+const Layout = () => import('@/views/layout')
+const home = () => import('@/views/home')
+const question = () => import('@/views/question')
+const video = () => import('@/views/video')
+const user = () => import('@/views/user')
+const chat = () => import('@/views/user/chat')
+const profile = () => import('@/views/user/profile')
+const login = () => import('@/views/login')
+const search = () => import('@/views/search')
+const searchResult = () => import('@/views/search/result')
+const article = () => import('@/views/article')
 
 const routes = [
   {
     path: '/',
-    redirect: '/home'
+    component: Layout,
+    // 二级路由
+    children: [{
+      path: '', // 二级路由默认组件
+      component: home
+    },
+    {
+      path: '/question', // 问答组件
+      component: question
+
+    }, {
+      path: '/video', // 视频组件
+      component: video
+
+    }, {
+      path: '/user', // 个人中心组件
+      component: user
+
+    }]
   },
   {
-    path: '/home',
-    component: Home
-    // component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: '/user/chat', // 智能问答组件
+    component: chat
   },
   {
-    path: '/article',
-    component: () => import('@/views/article')
+    path: '/user/profile', // 编辑资料组件
+    component: profile
+  },
+
+  {
+    path: '/login', // 登录组件
+    component: login
   },
   {
-    path: '/article',
-    component: () => import('@/views/article')
+    path: '/search', // 搜索中心组件
+    component: search
   },
   {
-    path: '/article',
-    component: () => import('@/views/article')
+    path: '/search/result', // 搜索结果
+    component: searchResult
   },
+
   {
-    path: '/article',
-    component: () => import('@/views/article')
-  },
-  {
-    path: '/article',
-    component: () => import('@/views/article')
+    path: '/article', // 文章详情
+    component: article
   }
 ]
 
