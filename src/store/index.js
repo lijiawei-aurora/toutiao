@@ -10,7 +10,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    user: auth.getUser() // token信息的对象
+    user: auth.getUser() // token信息的对象 应存{token refresh-token}
   },
   // 更改token
   mutations: {
