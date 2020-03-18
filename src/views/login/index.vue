@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+import { login } from '@/api/user'
 export default {
   data () {
     return {
@@ -63,17 +65,42 @@ export default {
       this.errorMessage.code = ''
       return true
     },
-    login () { // 点击登录按钮进行校验 若两个方法均返回true 则表明验证通过
-      if (this.checkMobile() && this.checkCode()) {
-        console.log('通过校验')
+    ...mapMutations(['updateUser']), // 将updateUser直接映射到methods中
+    async login () { // 点击登录按钮进行校验 若两个方法均返回true 则表明验证通过
+      const validateMobile = this.checkMobile()
+      const validateCode = this.checkCode()
+      if (validateMobile && validateCode) {
+        try {
+          const result = await login(this.loginForm) // await会强制等待 成功的结果
+          // loginForm中存的就是想要获取的值
+          // data: {
+          //   mobile: this.loginForm.mobile,
+          //   code: this.loginForm.code
+          // }
+          //  拿到token和refresh_token 后设置给vuex中的state
+          // 两种方式
+          // this.$store.commit('updateUser', result)
+          this.updateUser({
+            user: result
+          })
+          // 判断路径中是否有需要跳转的页面 若有 继续跳转，没有跳转到主页
+
+          const { redirectUrl } = this.$route.query
+          // 若前面有值就跳转前面的，没有就跳转后面的
+          this.$router.push(redirectUrl || '/')
+        } catch (error) {
+          // duration为显示时长
+          this.$notified({ message: '手机号或验证码错误' })
+        }
       }
     }
   }
-  // created () {
-  //   this.checkMobile()
-  //   this.checkCode()
-  // }
 }
+// created () {
+//   this.checkMobile()
+//   this.checkCode()
+// }
+
 </script>
 
 <style>
