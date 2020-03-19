@@ -5,5 +5,13 @@ export default {
     Vue.prototype.$notified = (params) => Vue.prototype.$notify({
       duration: 800, ...params
     })
+    Vue.prototype.$sleep = sleep
   }
+}
+// 休眠函数
+// 若不传参数就使用500
+function sleep (time = 500) {
+  return new Promise(function (resolve, reject) {
+    setTimeout(() => resolve(), time)
+  })
 }

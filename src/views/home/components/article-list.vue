@@ -69,6 +69,8 @@ export default {
   methods: {
     // 下拉刷新 用最新的时间戳 读取最新的数据 添加到数据头部
     async onRefresh () {
+      await this.$sleep()// 防止拉取数据频繁
+
       const data = await getArticles({
         channel_id: this.channel_id,
         timestamp: Date.now() // 最新的时间戳
@@ -96,6 +98,7 @@ export default {
     // 一秒后停止加载
     // 滚动条与底部距离小于 offset 时触发load事件
     async  onLoad () {
+      await this.$sleep()// 防止拉取数据频繁
       const data = await getArticles({
         channel_id: this.channel_id,
         // 若有历史时间戳就使用， 没有就传入当前的时间戳
