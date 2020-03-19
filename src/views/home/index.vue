@@ -1,32 +1,50 @@
 <template>
-  <div class="home">
+  <div class="container">
     <!-- 放置tabs组件 -->
     <van-tabs>
       <!-- 内部放置若干个标签 -->
-      <van-tab v-for="item in 10" :key="item" :title="`标签${item}`">
-        <!-- 设置滚动条 -->
-        <!-- <div class="scroll-wrapper">
+     <van-tab v-for="item in channels" :key="item.id" :title="item.name">
+      <!--   <div class="scroll-wrapper">
           <van-cell-group>
-            单元格
-            <van-cell title="标题" value="内容"></van-cell>
+            <van-cell v-for="item in 20" :key="item" :value="`nima${item}`"></van-cell>
           </van-cell-group>
         </div> -->
-        <ArticleList></ArticleList>
+        <!-- props给子组件传值 -->
+        <ArticleList :channel_id="item.id"></ArticleList>
       </van-tab>
+      <!-- 编辑频道的图标 -->
       <span class="bar_btn">
-      <van-icon name="wap-nav"></van-icon>
-    </span>
+        <van-icon name="wap-nav"></van-icon>
+      </span>
     </van-tabs>
-
   </div>
+
 </template>
 
 <script>
+// 引入getMychannels方法
+import { getMyChannels } from '@/api/channels'
+// 引入articleList组件
 import ArticleList from './components/article-list'
 export default {
   name: 'Home',
   components: {
     ArticleList
+  },
+  data () {
+    return {
+      channels: [] // 用于接收频道数据
+    }
+  },
+  methods: {
+    async getMychannels () {
+      const data = await getMyChannels()
+      // console.log(result)
+      this.channels = data.channels // 将数据赋值给data中的数据
+    }
+  },
+  created () {
+    this.getMychannels()
   }
 }
 </script>
@@ -59,7 +77,6 @@ export default {
     }
   }
 }
- // 需要放置编辑频道图标的位置
 .bar_btn {
   width: 36px;
   height: 35px;
