@@ -5,13 +5,14 @@ import store from './store'
 import '@/permission'
 import plugin from '@/utils/plugin' // 引入插件
 // 引入vant移动端组件库 完全导入 后期优化可使用哪个引入哪个
-import Vant from 'vant'
+import Vant, { Lazyload } from 'vant'
 // import 'vant/lib/index.css' // 引入vant组件样式
 import 'vant/lib/index.less' // 想修改某些变量 所以引入less
 import 'amfe-flexible' // 修改rem基准值的js插件
 import '@/styles/index.less' // 引入自定义全局样式 用于覆盖vant 的某些样式
 Vue.use(Vant) // 全局注册 相当于调用了vant的install方法
 Vue.use(plugin)// 注册插件
+Vue.use(Lazyload) // 注册懒加载的指令
 Vue.config.productionTip = false
 
 new Vue({
