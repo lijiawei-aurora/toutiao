@@ -14,3 +14,21 @@ export function getArticles (params) {
     params: { with_top: 1, ...params } // 合并数据
   })
 }
+
+// 不感兴趣的文章接口
+export function dislikeArticles (data) {
+  return request({
+    url: '/article/dislikes',
+    method: 'post',
+    data
+  })
+}
+
+// 举报文章接口
+export function reportAtricles (data) {
+  return request({
+    url: '/article/reports',
+    method: 'post',
+    data
+  })
+}
