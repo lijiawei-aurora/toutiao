@@ -14,7 +14,7 @@
         <ArticleList :channel_id="item.id" @showMoreAction="openAction"></ArticleList>
       </van-tab>
       <!-- 编辑频道的图标 -->
-      <span class="bar_btn">
+      <span class="bar_btn" @click="showChannelEdit=true">
         <van-icon name="wap-nav"></van-icon>
       </span>
     </van-tabs>
@@ -22,11 +22,19 @@
     <van-popup v-model="showMoreAction" style="width:80%">
       <!-- 放置反馈的组件 dislikeArticles不感兴趣 reportAtricles举报 $event为自定义事件传的第一个参数-->
     <moreAction  @dislikeArticles='reportOrDislikeAtricles("dislike")' @reportAtricles='reportOrDislikeAtricles("report",$event)'> </moreAction>
-          </van-popup>
+    </van-popup>
+    <!-- 弹出面板组件 v-model控制是否显示round取消圆角 默认为true-->
+    <van-action-sheet v-model='showChannelEdit' title="编辑频道" :round="false">
+        <!-- 频道编辑组件 -->
+        <!-- :channels="channels"将父组件的值传递给子组件 -->
+        <!-- 监听selectChannel事件 -->
+<ChannelEdit :activeIndex="activeIndex" :channels="channels" @addChannel="addChannel" @delChannel='delChannel' @selectChannel='selectChannel'></ChannelEdit>
+    </van-action-sheet>
   </div>
 </template>
 
 <script>
+import ChannelEdit from './components/channel-edit' // 引入编辑频道状态
 // 引入eventBus
 import eventBus from '@/utils/eventBus'
 // 引入不感兴趣接口
@@ -34,7 +42,7 @@ import { dislikeArticles, reportAtricles } from '@/api/articles'
 // 引入 弹层组件
 import moreAction from './components/more-action'
 // 引入getMychannels方法
-import { getMyChannels } from '@/api/channels'
+import { getMyChannels, delChannels, addChannel } from '@/api/channels'
 // 引入articleList组件
 import ArticleList from './components/article-list'
 
@@ -42,17 +50,48 @@ export default {
   name: 'Home',
   components: {
     ArticleList,
-    moreAction
+    moreAction,
+    ChannelEdit
   },
   data () {
     return {
       channels: [], // 用于接收频道数据
       showMoreAction: false, // 是否显示弹层
       articleId: null, // 点击的文章id
-      activeIndex: 0 // 当前默认激活的页签
+      activeIndex: 0, // 当前默认激活的页签
+      showChannelEdit: false // 是否显示频道编辑组件
     }
   },
   methods: {
+    // 添加频道的方法
+    async addChannel (channel) {
+      try {
+        await addChannel(channel)
+        this.channels.push(channel) // 频道的数据（页签显示的我的频道）
+      } catch {}
+    },
+    // 子组件触发selectChannel时 触发该方法
+    selectChannel (id) {
+      // 方法二可以直接传递索引 就不需要该句了
+      const index = this.channels.findIndex(item => item.id === id) // 获取当前点击（传过来的id）的频道的索引
+      this.activeIndex = index // 将当前激活页签索引值更改为对应频道的索引
+      this.showChannelEdit = false// 关闭弹层
+    },
+    // 删除频道的方法
+    async delChannel (id) {
+      try {
+        await delChannels(id)
+        const index = this.channels.findIndex(item => item.id === id)
+        // 若删除的索引在当前激活索引之前或等于当前激活索引
+        // 当前激活索引会改变， 若删除后面的不影响
+        if (index <= this.activeIndex) {
+          this.activeIndex = this.activeIndex - 1
+        }
+        this.channels.splice(index, 1)// 删除对应索引频道
+      } catch (error) {
+        this.$notified({ message: '删除频道失败' })
+      }
+    },
     // 将两个方法封装到一起 operateType判断时执行不感兴趣还是举报
     async reportOrDislikeAtricles (operateType, type) {
       try {
@@ -118,12 +157,24 @@ export default {
     }
   },
   created () {
-    this.getMychannels()
+    this.getMychannels() // 获取我的频道
   }
 }
 </script>
 
 <style lang="less" scoped>
+// 弹出面板组件的样式
+.van-action-sheet {
+  max-height: 100%;
+  height: 100%;
+  .van-action-sheet__header {
+    background: #3296fa;
+    color: #fff;
+    .van-icon-close {
+      color: #fff;
+    }
+  }
+}
 .van-tabs {
   height: 100%;
   display: flex;
