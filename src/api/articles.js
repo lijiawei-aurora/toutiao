@@ -32,3 +32,19 @@ export function reportAtricles (data) {
     data
   })
 }
+
+// 获取联想搜索建议
+export function getSuggestion (params) {
+  return request({
+    url: '/suggestion',
+    params
+  })
+}
+
+// 搜索文章方法
+export function searchArticles (params) {
+  return request({
+    url: '/search',
+    params// 关键字及分页信息
+  })
+}
