@@ -12,3 +12,19 @@ export function login (data) {
     data
   })
 }
+
+// 关注用户
+export function followUser (data) {
+  return request({
+    url: '/user/followings',
+    method: 'post',
+    data
+  })
+}
+// 取消关注用户
+export function cancelfollowUser (autid) {
+  return request({
+    url: `/user/followsings/${autid}`,
+    method: 'delete'
+  })
+}

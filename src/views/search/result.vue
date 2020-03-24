@@ -6,7 +6,8 @@
     <!-- 放置搜索结果列表 实现上拉加载 -->
     <van-list @load="onLoad" v-model="upLoading" :finished="finished" :finished-text="我也是有底线的哦">
       <van-cell-group>
-        <van-cell v-for="item in articles" :key="item.art_id.toString()">
+          <!-- to 属性可以跳转到文章详情 并传递文章id -->
+        <van-cell :to='`/article?artId=${item.art_id.toString()}`' v-for="item in articles" :key="item.art_id.toString()">
           <div class="article_item">
             <!-- 文章标题 -->
             <h3 class="van-ellipsis"> {{ item.title  }}</h3>

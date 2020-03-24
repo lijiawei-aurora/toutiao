@@ -48,3 +48,20 @@ export function searchArticles (params) {
     params// 关键字及分页信息
   })
 }
+
+// 获取文章详情
+export function getArticleInfo (artId) {
+  return request({
+    url: `/articles/${artId}`
+  })
+}
+
+// 获取文章评论 或评论回复
+// 传入 type（文章的评论还是评论的回复）
+// source(文章或评论id) offset(访问第二页 传入第一页最后一个id 以此类推 查第一页offset为空)
+export function getComments (params) {
+  return request({
+    url: '/comments',
+    params
+  })
+}

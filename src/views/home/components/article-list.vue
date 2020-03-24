@@ -13,7 +13,8 @@
       <van-list finished-text="我也是有底线的哦" v-model="upLoading" :finished="finished" @load="onLoad">
         <van-cell-group>
           <!-- art_id为大数字 需转为字符串或数字 -->
-          <van-cell  v-for="item in articles" :key="item.art_id.toString()" :value="`nohao${item}`">
+          <!-- to 属性可以跳转到对应的地址 并传递文章id -->
+          <van-cell :to='`/article?artId=${item.art_id.toString()}`'  v-for="item in articles" :key="item.art_id.toString()" :value="`nohao${item}`">
             <div class="article_item">
               <!-- 文章标题 -->
               <h3 class="van-ellipsis">{{item.title}}</h3>
@@ -37,7 +38,7 @@
                 <span
                   class="close"
                   v-if="$store.state.user.token"
-                  @click="$emit('showMoreAction',item.art_id.toString())"
+                  @click.stop="$emit('showMoreAction',item.art_id.toString())"
                 >
                   <van-icon name="cross"></van-icon>
                 </span>
