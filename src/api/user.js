@@ -28,3 +28,39 @@ export function cancelfollowUser (autid) {
     method: 'delete'
   })
 }
+
+// 获取用户资料
+export function getUserInfo () {
+  return request({
+    url: '/user'
+  })
+}
+
+/****
+ * 获取用户个人资料
+ * *****/
+export function getUserProfile () {
+  return request({
+    url: '/user/profile' // 获取用户个人资料的接口地址
+  })
+}
+
+/****
+ * 修改用户头像
+ * *****/
+export function updatePhoto (data) {
+  return request({
+    url: '/user/photo',
+    method: 'patch',
+    data
+  })
+}
+
+// 保存用户信息
+export function savaUserInfo (data) {
+  return request({
+    url: '/user/profile',
+    method: 'patch',
+    data: { ...data, photo: null }// 直接将photo设置为空  photo 通过修改头像更改
+  })
+}
