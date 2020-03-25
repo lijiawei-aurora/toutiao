@@ -65,3 +65,13 @@ export function getComments (params) {
     params
   })
 }
+
+// 评论或回复
+export function commentOrReply (data) {
+  return request({
+    url: '/comments',
+    method: 'post',
+    data
+
+  })
+}
