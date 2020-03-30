@@ -59,6 +59,7 @@
 
 import { getUserProfile, updatePhoto, savaUserInfo } from '@/api/user'
 import dayjs from 'dayjs'
+import { mapMutations } from 'vuex'
 export default {
   data () {
     return {
@@ -82,6 +83,8 @@ export default {
     }
   },
   methods: {
+    // 引入更新头像
+    ...mapMutations(['updatePhoto']),
     async saveUser () {
       try {
         await savaUserInfo(this.user)
@@ -90,12 +93,14 @@ export default {
         this.$notified({ message: '操作失败' })
       }
     },
+    // 修改头像
     async upload (params) {
       // 头像上传
       const data = new FormData()
       data.append('photo', this.$refs.myFile.files[0])
       const result = await updatePhoto(data)
       this.user.photo = result.photo
+      this.updatePhoto = result.photo// 将最新的头像地址设置给vuex中
       this.showPhoto = false
     },
     openDialog () {

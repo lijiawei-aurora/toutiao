@@ -58,9 +58,11 @@ export default {
   methods: {
 
     async getUserInfo () {
+      // 获取用户信息
       this.userInfo = await getUserInfo()
+      this.updatePhoto({ photo: this.userInfo.photo })// 调用vuex中的方法设置用户头像
     },
-    ...mapMutations('[delUser]'), // 将vuex中的方法引入
+    ...mapMutations(['clearUser', 'updatePhoto']), // 将vuex中的方法引入
     // 登出操作
     async lgout () {
       await this.$dialog.confirm({

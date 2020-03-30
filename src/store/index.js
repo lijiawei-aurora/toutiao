@@ -10,11 +10,15 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    user: auth.getUser() // token信息的对象 应存{token refresh-token}
-
+    user: auth.getUser(), // token信息的对象 应存{token refresh-token}
+    photo: null// 用户头像
   },
   // 更改token
   mutations: {
+    // 更改用户头像
+    updatePhoto (state, payload) {
+      state.photo = payload.photo
+    },
     // 修改token  state为状态对象 payload为载荷，传参
     updateUser (state, payload) {
       state.user = payload.user

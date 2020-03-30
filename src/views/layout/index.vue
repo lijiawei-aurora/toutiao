@@ -4,7 +4,10 @@
     <van-nav-bar @click-right="$router.push('/search')" title="头条" fixed  right-text="搜索" v-if='$route.path!=="/user"?true:false'></van-nav-bar>
     <!-- 二级路由容器  路径为/user 就应用 noTop样式-->
     <div class="my-wrapper" :class="{noTop:$route.path==='/user'}">
+     <keep-alive>
+       <!-- 被包裹的路由容器里的组件不会被销毁 -->
       <router-view></router-view>
+      </keep-alive>
     </div>
     <!-- 标签栏组件 route 为开启路由模式 van-tabbar-item可作为router-link使用 -->
     <van-tabbar route>
