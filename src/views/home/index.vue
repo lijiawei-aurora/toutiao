@@ -2,7 +2,7 @@
   <div class="container">
     <!-- 放置tabs组件 -->
     <!-- v-model 默认绑定当前激活的页签的索引 -->
-    <van-tabs v-model='activeIndex'>
+    <van-tabs v-model='activeIndex' @change="changeTab">
       <!-- 内部放置若干个标签 -->
       <van-tab v-for="item in channels" :key="item.id" :title="item.name">
         <!--   <div class="scroll-wrapper">
@@ -63,6 +63,10 @@ export default {
     }
   },
   methods: {
+    // 切换页签事件
+    changeTab () {
+      eventBus.$emit(('changeTab'), this.channels[this.activeIndex].id)
+    },
     // 添加频道的方法
     async addChannel (channel) {
       try {

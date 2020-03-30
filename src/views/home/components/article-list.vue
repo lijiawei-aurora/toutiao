@@ -2,7 +2,7 @@
   <!-- 文章列表组件 -->
 
   <!-- 滚动条  用于记录上次阅读停留的位置-->
-  <div class="scroll-wrapper">
+  <div class="scroll-wrapper" @scroll="remember" ref='myScroll'>
     <!-- 下拉刷新组件  下拉刷新时会触发 refresh 事件， :success-text刷新成功提示文字-->
     <van-pull-refresh v-model="downLoading" @refresh="onRefresh" :success-text="successText">
       <!-- van-list 距底部的距离大于offset（默认为300 ） 自动执行load事件 -->
@@ -74,6 +74,19 @@ export default {
         }
       }
     })
+    eventBus.$on('changeTab', id => {
+      if (id === this.channel_id) {
+        // 需滚动该滚动条
+        // 由于是异步操作 此时得不到 this.$refs.myScroll
+        this.$nextTick(() => {
+          // 等页面渲染完执行
+          if (!this.$refs.maScroll && this.scrollTop) {
+          // 让div滚动回原来的位置
+            this.$refs.myScroll.scrollTop = this.scrollTop// 滚动到记录的位置
+          }
+        })
+      }
+    })
   },
   // props可以跟对象形式  校验传入的数据
   props: {
@@ -90,10 +103,25 @@ export default {
       articles: [], // 文章列表
       downLoading: false, // 是否正在下拉刷新
       successText: '',
-      timestamp: null // 存储历史时间戳
+      timestamp: null, // 存储历史时间戳
+      scrollTop: null // 记录滚动条的位置
+    }
+  },
+  activated () { // 组件缓存独有的事件
+    if (!this.$refs.maScroll && this.scrollTop) {
+    // 让div滚动回原来的位置
+      this.$refs.myScroll.scrollTop = this.scrollTop// 滚动到记录的位置
     }
   },
   methods: {
+    // 函数防抖 一段时间之内，只执行最后一次事件
+    remember (event) {
+      clearTimeout(this.timer)
+      this.timer = setTimeout(() => {
+        this.scrollTop = event.target.scrollTop
+      })
+    },
+
     // 下拉刷新 用最新的时间戳 读取最新的数据 添加到数据头部
     async onRefresh () {
       await this.$sleep() // 防止拉取数据频繁

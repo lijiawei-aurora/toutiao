@@ -22,7 +22,10 @@ const routes = [
     // 二级路由
     children: [{
       path: '', // 二级路由默认组件
-      component: home
+      component: home,
+      meta: {
+        isAlive: true
+      }
     },
     {
       path: '/question', // 问答组件
